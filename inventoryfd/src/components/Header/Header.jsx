@@ -1,5 +1,4 @@
 import React from 'react'
-import '../../assets/css/style.css';
 import Logo  from "../../assets/image/profile.png";
 
 

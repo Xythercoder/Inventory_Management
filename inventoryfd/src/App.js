@@ -1,7 +1,11 @@
 import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import { Login, PrivateRoute, Inventories, Dashboard, Add  } from './components';
+import { Login, PrivateRoute, Inventories, Dashboard, Add } from './components';
 import { appRoute } from './utils/constants';
+import '@fortawesome/fontawesome-free/css/all.min.css';
+import '@fortawesome/fontawesome-free/js/all.min.js';
+import '../src/assets/css/style.css'
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const { login, dashboard, inventories, addInventories } = appRoute;
 
