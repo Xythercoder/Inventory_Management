@@ -13,19 +13,23 @@ services:
       - .env
     depends_on:
       - db
+    networks:
+      - Abhaydan
 
   db:
     image: postgres:15
     container_name: inventory_db
     restart: always
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: inventory
     volumes:
       - postgres_data:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
+    env_file:
+      - .env
+    networks:
+      - Inventory 
+
+networks:
+  Inventory:
+    driver: bridge
 
 volumes:
   static_volume:
