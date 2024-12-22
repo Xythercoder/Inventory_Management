@@ -1,14 +1,24 @@
 from pathlib import Path
 import os
+import environ
 from datetime import timedelta
 
+env = environ.Env()
+
+env = environ.Env(
+    # Set default values and casting
+    DEBUG=(bool, False)
+)
+
 BASE_DIR = Path(__file__).resolve().parent.parent
+environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 
-SECRET_KEY = "django-insecure-ehhk0v6r@)tu22(wob6ml2i0%+qy&kvzwhpg37c=^gbirr)xsq"
+SECRET_KEY = SECRET_KEY = env(
+    'SECRET_KEY', default='1r4+$g(@@e8t$_p(mzpohoz6g=@xl+jvsg984zas%w23$q+g%@')
 
-DEBUG = True
+DEBUG = env('DEBUG')
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS',  default=["127.0.0.1", "localhost"])
 
 
 INSTALLED_APPS = [
@@ -31,14 +41,14 @@ MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
-    "inventorybd.middleware.CsrfExemptMiddleware",
+    "api.middleware.CsrfExemptMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = "inventorybd.urls"
+ROOT_URLCONF = "api.urls"
 
 TEMPLATES = [
     {
@@ -56,15 +66,11 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "inventorybd.wsgi.application"
+WSGI_APPLICATION = "api.wsgi.application"
 
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-    }
+    "default": env.db("DATABASE_URL", default="sqlite:///db.sqlite3"),
 }
-
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -92,8 +98,8 @@ USE_TZ = True
 
 
 STATIC_URL = "static/"
-STATICFILES_DIRS = [os.path.join(BASE_DIR, "build/static")]
-# STATIC_ROOT = os.path.join(BASE_DIR, "build/static")
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "build/staticfiles")]
+# STATIC_ROOT = os.path.join(BASE_DIR, "build/staticfiles")
 
 MEDIA_URL = "media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "build/media")
@@ -111,7 +117,7 @@ REST_FRAMEWORK = {
     ],
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
     "PAGE_SIZE": "10",
-    "EXCEPTION_HANDLER": "inventorybd.utils.custom_exception_handler",
+    "EXCEPTION_HANDLER": "api.utils.custom_exception_handler",
 }
 
 SIMPLE_JWT = {
